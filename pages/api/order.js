@@ -4,8 +4,7 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
   if (req.method !== "POST") {
@@ -13,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const gasUrl = "https://script.google.com/macros/s/AKfycbzU6jpN3cwDw4OhaRwu0XHf61WEqEN6M5_Y9W2mGsCu6ciZCz6aY-EkEtPgx8t8DCZLkQ/exec";
+    const gasUrl = "https://script.google.com/macros/s/AKfycbxECRShDa1weBdOuMJCkVzwe4Ggu6Jmrwih_hR48w0fKbJfyUM0gbjHG7eOEasue2sG_A/exec";
 
     const gasRes = await fetch(gasUrl, {
       method: "POST",
@@ -21,8 +20,17 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body),
     });
 
-    const data = await gasRes.json();
-    return res.status(200).json(data);
+    const text = await gasRes.text();
+
+    try {
+      const data = JSON.parse(text);
+      return res.status(200).json(data);
+    } catch (err) {
+      return res.status(502).json({
+        error: "GAS did not return valid JSON",
+        htmlPreview: text.slice(0, 300), // náhled co přišlo
+      });
+    }
   } catch (err) {
     return res.status(500).json({ error: "Proxy Error", detail: String(err) });
   }
