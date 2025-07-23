@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const gasUrl = "https://script.google.com/macros/s/AKfycbxECRShDa1weBdOuMJCkVzwe4Ggu6Jmrwih_hR48w0fKbJfyUM0gbjHG7eOEasue2sG_A/exec";
+    const gasUrl = "https://script.google.com/macros/s/AKfycbz9tLjJt3KJWG-qQMBB6dwdbqKmEMrWidN8x9__Rte25gRQQgfZ90-_m3Mb7hseOv4dGA/exec";
 
     const gasRes = await fetch(gasUrl, {
       method: "POST",
